@@ -27,11 +27,31 @@ regd_users.post("/login", (req,res) => {
 
   const accessToken = jwt.sign({ username }, "access", { expiresIn: "1h" });
   req.session.authorization = { accessToken, username };
-  return res.status(200).json({ message: "User successfully logged in", token: accessToken });
+  return res.status(200).json({ message: "User successfully logged in as a registered user", token: accessToken });
 });
 
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
+  const isbn = req.params.isbn;
+  const username = req.user.username;
+  const review = req.body.review;
+
+  if (!books[isbn]) {
+    return res.status(404).json({ message: "Book not found" });
+  }
+
+  if (!review) {
+    return res.status(400).json({ message: "Review is required" });
+  }
+
+  books[isbn].reviews[username] = review;
+  return res.status(200).json({
+    message: "Review successfully added or updated",
+    reviews: books[isbn].reviews
+  });
+});
+
+regd_users.put("/review/:isbn", (req, res) => {
   const isbn = req.params.isbn;
   const username = req.user.username;
   const review = req.body.review;

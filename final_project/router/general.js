@@ -6,24 +6,39 @@ let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
 const getAllBooksUsingAxios = async () => {
-  const response = await axios.get("http://localhost:5000/");
-  return response.data;
+  try {
+    const response = await axios.get("http://localhost:5000/");
+    return response.data;
+  } catch (error) {
+    return error.response ? error.response.data : { message: error.message };
+  }
 };
 
 const getBookByISBNUsingAxios = (isbn) => {
   return axios
     .get(`http://localhost:5000/isbn/${isbn}`)
-    .then((response) => response.data);
+    .then((response) => response.data)
+    .catch((error) =>
+      error.response ? error.response.data : { message: error.message }
+    );
 };
 
 const getBooksByAuthorUsingAxios = async (author) => {
-  const response = await axios.get(`http://localhost:5000/author/${author}`);
-  return response.data;
+  try {
+    const response = await axios.get(`http://localhost:5000/author/${author}`);
+    return response.data;
+  } catch (error) {
+    return error.response ? error.response.data : { message: error.message };
+  }
 };
 
 const getBooksByTitleUsingAxios = async (title) => {
-  const response = await axios.get(`http://localhost:5000/title/${title}`);
-  return response.data;
+  try {
+    const response = await axios.get(`http://localhost:5000/title/${title}`);
+    return response.data;
+  } catch (error) {
+    return error.response ? error.response.data : { message: error.message };
+  }
 };
 
 

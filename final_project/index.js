@@ -10,7 +10,7 @@ app.use(express.json());
 
 app.use("/customer",session({secret:"fingerprint_customer",resave: true, saveUninitialized: true}))
 
-app.use("/customer/auth/*", function auth(req,res,next){
+app.use(["/customer/auth/*", "/customer/review/*"], function auth(req,res,next){
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
